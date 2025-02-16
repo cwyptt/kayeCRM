@@ -1,0 +1,21 @@
+<div th:fragment="system-info(entity)">
+    <div class="row mt-4">
+        <div class="col-12">
+            <h6 class="text-muted mb-3">System Information</h6>
+            <dl class="row">
+                <dt class="col-sm-2">ID</dt>
+                <dd class="col-sm-10" th:text="${entity.id}">123</dd>
+
+                <dt class="col-sm-2">Created At</dt>
+                <dd class="col-sm-10" th:text="${#temporals.format(entity.createdAt, 'MMM dd, yyyy HH:mm:ss')}">
+                    Jan 01, 2024 12:00:00
+                </dd>
+
+                <dt class="col-sm-2">Last Updated</dt>
+                <dd class="col-sm-10" th:text="${#temporals.format(entity.updatedAt, 'MMM dd, yyyy HH:mm:ss')}">
+                    Jan 01, 2024 12:00:00
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>

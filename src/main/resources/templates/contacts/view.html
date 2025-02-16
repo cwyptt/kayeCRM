@@ -1,0 +1,77 @@
+<!-- resources/static/templates/contacts/view.html -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<body>
+<div layout:fragment="content">
+    <div class="card">
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5 class="card-title" th:text="${contact.getFullName()}">Contact Name</h5>
+                    <span class="text-muted">
+                        <em th:text="${contact.position}">Position</em> at
+                        <span th:text="${contact.customerCompany}">Company Name</span>
+                    </span>
+<!--                    <p class="text-muted" th:text="${positionAndCompany}"></p>-->
+<!--                        <span th:text="${contact.position}">Position</span> at-->
+<!--                        <a th:href="@{/customers/{id}(id=${contact.customerId})}"-->
+<!--                           th:text="${customerName}">Company Name</a>-->
+                </div>
+                <div class="col-md-6 text-end">
+                    <a th:href="@{/contacts/edit/{id}(id=${contact.id})}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a th:href="@{/contacts}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8">
+                            <a th:href="'mailto:' + ${contact.email}" th:text="${contact.email}">email@example.com</a>
+                        </dd>
+
+                        <dt class="col-sm-4">Phone</dt>
+                        <dd class="col-sm-8">
+                            <a th:href="'tel:' + ${contact.phone}" th:text="${contact.phone}">123-456-7890</a>
+                        </dd>
+
+                        <dt class="col-sm-4">Position</dt>
+                        <dd class="col-sm-8" th:text="${contact.position}">Position</dd>
+
+                        <dt class="col-sm-4">Department</dt>
+                        <dd class="col-sm-8" th:text="${contact.department}">Department</dd>
+
+                        <dt class="col-sm-4">Company</dt>
+                        <dd class="col-sm-8" th:text="${contact.customerCompany}">Company</dd>
+
+                        <dt class="col-sm-4">Contact</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge" th:classappend="${contact.primary} ? 'bg-success' : 'bg-secondary'"
+                                  th:text="${contact.primary} ? 'Primary' : 'Secondary'">
+                            </span>
+                            <span class="small ms-1 me-1">
+                                contact of
+                            </span>
+                            <a
+                                    th:href="@{/customers/{id}(id=${contact.customerId})}"
+                                    th:text="${customerName}">Customer Name
+                            </a>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div th:replace="~{fragments/system-info :: system-info(${contact})}"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

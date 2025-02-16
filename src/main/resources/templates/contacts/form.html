@@ -1,0 +1,82 @@
+<!-- resources/static/templates/contacts/form.html -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<body>
+<div layout:fragment="content">
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{${contact.id == null ? '/contacts/save' : '/contacts/update'}}"
+                  th:object="${contact}"
+                  method="post">
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="mb-3">
+                    <label for="customer" class="form-label">Customer</label>
+                    <select class="form-select" id="customer" th:field="*{customerId}" required>
+                        <option value="">Select Customer</option>
+                        <option th:each="customer : ${customers}"
+                                th:value="${customer.id}"
+                                th:text="${customer.company + ' - ' + customer.firstName + ' ' + customer.lastName}">
+                        </option>
+                    </select>
+                    <div class="text-danger" th:if="${#fields.hasErrors('customerId')}" th:errors="*{customerId}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" th:field="*{phone}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="position" class="form-label">Position</label>
+                    <input type="text" class="form-control" id="position" th:field="*{position}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="department" class="form-label">Department</label>
+                    <input type="text" class="form-control" id="department" th:field="*{department}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('department')}" th:errors="*{department}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="isPrimary" th:field="*{primary}">
+                        <label class="form-check-label" for="isPrimary">
+                            Primary Contact
+                        </label>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/contacts}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

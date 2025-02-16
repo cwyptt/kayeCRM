@@ -1,0 +1,53 @@
+<!-- resources/static/templates/contacts/index.html -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<body>
+<section layout:fragment="content">
+    <div class="data-grid">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Position</th>
+                <th>Department</th>
+                <th>Company</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="contact : ${contacts}">
+                <td th:text="${contact.firstName}" />
+                <td th:text="${contact.lastName}" />
+                <td th:text="${contact.email}" />
+                <td th:text="${contact.phone}" />
+                <td th:text="${contact.position}" />
+                <td th:text="${contact.department}" />
+                <td th:text="${contact.customerCompany}" />
+                <td>
+                    <a th:href="@{/contacts/edit/{id}(id=${contact.id})}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a th:href="@{/contacts/{id}(id=${contact.id})}" class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <button
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="deleteContact(this)"
+                            th:data-contact-id="${contact.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

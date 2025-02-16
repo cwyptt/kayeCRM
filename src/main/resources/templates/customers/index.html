@@ -1,0 +1,48 @@
+<!-- resources/static/templates/customers/index.html -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<body>
+<div layout:fragment="content">
+    <div class="data-grid">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Company</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.firstName}">John</td>
+                <td th:text="${customer.lastName}">Doe</td>
+                <td th:text="${customer.email}">john@example.com</td>
+                <td th:text="${customer.phone}">(555) 123-4567</td>
+                <td th:text="${customer.company}">Acme Corp</td>
+                <td>
+                    <a th:href="@{/customers/edit/{id}(id=${customer.id})}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a th:href="@{/customers/{id}(id=${customer.id})}" class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <button
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="deleteCustomer(this)"
+                            th:data-customer-id="${customer.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
