@@ -11,8 +11,4 @@ public class ContactNotFoundException extends RuntimeException {
     public ContactNotFoundException(Long id) {
         super("Customer with ID " + id + " not found");
     }
-
-    public ContactNotFoundException(Throwable cause) {
-        super(DEFAULT_MESSAGE, cause);
-    }
 }

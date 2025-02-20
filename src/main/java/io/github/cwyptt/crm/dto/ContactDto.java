@@ -1,8 +1,8 @@
 package io.github.cwyptt.crm.dto;
 
 import io.github.cwyptt.crm.utility.NameUtils;
-import io.github.cwyptt.crm.utility.PhoneNumberFormatter;
-import io.github.cwyptt.crm.utility.validation.PhoneNumber.ValidPhoneNumber;
+import io.github.cwyptt.crm.value.PhoneNumber;
+import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -26,27 +26,24 @@ public class ContactDto {
     @NotBlank(message = EMAIL_REQUIRED)
     private String email;
 
-    @ValidPhoneNumber
-    private String phone;
+    @Embedded
+    private PhoneNumber phone;
+
 
     private String position;
     private String department;
-    private Long customerId;
-    private String customerCompany;
-    private boolean isPrimary;
+
+
+    private Long companyId;
+    private String companyName;  // For convenience in UI
+
+    private boolean isPrimaryContact;
+    private boolean isCustomer;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public void setPhone(String phone) {
-        this.phone = PhoneNumberFormatter.formatPhoneNumber(phone);
-    }
-
     public String getFullName() {
         return NameUtils.getFullName(this);
-    }
-
-    public boolean isPrimary() {
-        return isPrimary;
     }
 }

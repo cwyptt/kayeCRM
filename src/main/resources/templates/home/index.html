@@ -1,0 +1,19 @@
+<!-- home/index.html -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<body>
+<div layout:fragment="content">
+    <!-- Stats Cards -->
+    <div th:replace="~{fragments/home/stats-cards :: stats-cards}"></div>
+
+    <!-- Activity and Quick Actions -->
+    <div class="row">
+        <div th:replace="~{fragments/home/recent-activity :: recent-activity}"></div>
+        <div th:replace="~{fragments/home/quick-actions :: quick-actions}"></div>
+    </div>
+</div>
+</body>
+</html>

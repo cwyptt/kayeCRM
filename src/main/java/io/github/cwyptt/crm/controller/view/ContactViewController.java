@@ -1,8 +1,9 @@
 // src/main/io.github.cwyptt.crm/controller/view/ContactViewController.java
 package io.github.cwyptt.crm.controller.view;
 
+import io.github.cwyptt.crm.dto.CompanyDto;
 import io.github.cwyptt.crm.dto.ContactDto;
-import io.github.cwyptt.crm.dto.CustomerDto;
+import io.github.cwyptt.crm.service.CompanyService;
 import io.github.cwyptt.crm.service.ContactService;
 import io.github.cwyptt.crm.service.CustomerService;
 import jakarta.validation.Valid;
@@ -17,8 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 @RequestMapping("/contacts")
 public class ContactViewController {
-
     private final ContactService contactService;
+    private final CompanyService companyService;
     private final CustomerService customerService;
 
     @GetMapping
@@ -32,17 +33,16 @@ public class ContactViewController {
     @GetMapping("/{id}")
     public String viewContact(@PathVariable Long id, Model model) {
         ContactDto contact = contactService.getContact(id);
-        CustomerDto customer = customerService.getCustomer(contact.getCustomerId());
-        String positionAndCompany = contact.getPosition() + " at " + customer.getCompany();
-//        String companyName = customer.getCompany();
-        String customerName = customer.getFullName();
+        CompanyDto company = null;
+        if (contact.getCompanyId() != null) {
+            company = companyService.getCompany(contact.getCompanyId());
+        }
 
         model.addAttribute("activeTab", "contacts");
         model.addAttribute("pageTitle", "View Contact");
         model.addAttribute("contact", contact);
-        model.addAttribute("positionAndCompany", positionAndCompany);
-//        model.addAttribute("companyName", companyName);
-        model.addAttribute("customerName", customerName);
+        model.addAttribute("company", company);
+        model.addAttribute("isCustomer", customerService.hasActiveCustomerRelationship(id));
 
         return "contacts/view";
     }
@@ -52,7 +52,7 @@ public class ContactViewController {
         model.addAttribute("activeTab", "contacts");
         model.addAttribute("pageTitle", "Add Contact");
         model.addAttribute("contact", new ContactDto());
-        model.addAttribute("customers", customerService.getAllCustomers());
+        model.addAttribute("companies", companyService.getAllCompanies());
         return "contacts/form";
     }
 
@@ -61,17 +61,18 @@ public class ContactViewController {
         model.addAttribute("activeTab", "contacts");
         model.addAttribute("pageTitle", "Edit Contact");
         model.addAttribute("contact", contactService.getContact(id));
-        model.addAttribute("customers", customerService.getAllCustomers());
+        model.addAttribute("companies", companyService.getAllCompanies());
         return "contacts/form";
     }
 
     @PostMapping("/save")
-    public String saveContact(@Valid @ModelAttribute("contact") ContactDto contactDto,
-                              BindingResult result,
-                              Model model,
-                              RedirectAttributes redirectAttributes) {
+    public String saveContact(
+            @Valid @ModelAttribute("contact") ContactDto contactDto,
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("customers", customerService.getAllCustomers());
+            model.addAttribute("companies", companyService.getAllCompanies());
             return "contacts/form";
         }
 
@@ -80,26 +81,31 @@ public class ContactViewController {
             redirectAttributes.addFlashAttribute("successMessage", "Contact created successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error creating contact: " + e.getMessage());
+            model.addAttribute("companies", companyService.getAllCompanies());
+            return "contacts/form";
         }
 
         return "redirect:/contacts";
     }
 
     @PostMapping("/update")
-    public String updateContact(@Valid @ModelAttribute("contact") ContactDto contactDTO,
-                                BindingResult result,
-                                Model model,
-                                RedirectAttributes redirectAttributes) {
+    public String updateContact(
+            @Valid @ModelAttribute("contact") ContactDto contactDto,
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("customers", customerService.getAllCustomers());
+            model.addAttribute("companies", companyService.getAllCompanies());
             return "contacts/form";
         }
 
         try {
-            contactService.updateContact(contactDTO.getId(), contactDTO);
+            contactService.updateContact(contactDto.getId(), contactDto);
             redirectAttributes.addFlashAttribute("successMessage", "Contact updated successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error updating contact: " + e.getMessage());
+            model.addAttribute("companies", companyService.getAllCompanies());
+            return "contacts/form";
         }
 
         return "redirect:/contacts";

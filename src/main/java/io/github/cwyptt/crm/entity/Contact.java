@@ -1,18 +1,11 @@
 package io.github.cwyptt.crm.entity;
 
-import io.github.cwyptt.crm.utility.NameUtils;
-import io.github.cwyptt.crm.utility.PhoneNumberFormatter;
-import io.github.cwyptt.crm.utility.validation.PhoneNumber.ValidPhoneNumber;
+import io.github.cwyptt.crm.value.PhoneNumber;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
-import static io.github.cwyptt.crm.utility.constant.ValidationConstants.*;
-import static io.github.cwyptt.crm.utility.constant.ValidationConstants.EMAIL_REQUIRED;
 
 @Data
 @NoArgsConstructor
@@ -22,33 +15,41 @@ public class Contact {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = FIRST_NAME_REQUIRED)
     @Column(name = "first_name")
     private String firstName;
 
-    @NotBlank(message = LAST_NAME_REQUIRED)
     @Column(name = "last_name")
     private String lastName;
 
-    @Email(message = EMAIL_VALID)
-    @NotBlank(message = EMAIL_REQUIRED)
     @Column(unique = true)
     private String email;
 
-    @ValidPhoneNumber
-    private String phone;
+    @Embedded
+    private PhoneNumber phone;
 
     private String position;
-
     private String department;
 
+    // Company relationship
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "company_id")
+    private Company company; // Optional - company the contact works for
 
-    @Column(name = "is_primary")
-    private boolean isPrimary;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "customer_id", nullable = false)
+//    private Customer customer;
 
+    @Column(name = "is_primary_contact")
+    private boolean isPrimaryContact; // Are they the primary contact for their company?
+
+    @Column(name = "is_customer")
+    private boolean isCustomer; // Indicates if this contact is also a customer
+
+    // Customer-specific fields (only relevant if isCustomer is true)
+    private LocalDateTime customerSince;  // When did they become a customer?
+    private String customerStatus;  // Active, Inactive, Prospect, etc.
+
+    // Audit fields
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -64,9 +65,5 @@ public class Contact {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    public void setPhone(String phone) {
-        this.phone = PhoneNumberFormatter.formatPhoneNumber(phone);
     }
 }

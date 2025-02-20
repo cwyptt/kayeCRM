@@ -23,8 +23,8 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(CustomerHasAssociatedContactsException.class)
-    public ResponseEntity<ErrorResponse> handleCustomerHasContacts(CustomerHasAssociatedContactsException ex) {
+    @ExceptionHandler(CompanyHasAssociatedContactsException.class)
+    public ResponseEntity<ErrorResponse> handleCustomerHasContacts(CompanyHasAssociatedContactsException ex) {
         return new ResponseEntity<>(
                 new ErrorResponse("HAS_CONTACTS", ex.getMessage()),
                 HttpStatus.CONFLICT

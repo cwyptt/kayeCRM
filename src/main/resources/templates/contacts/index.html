@@ -1,4 +1,4 @@
-<!-- resources/static/templates/contacts/index.html -->
+<!-- contacts/index.html -->
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
@@ -16,29 +16,32 @@
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Position</th>
-                <th>Department</th>
+<!--                <th>Department</th>-->
                 <th>Company</th>
+                <th>Customer</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="contact : ${contacts}">
-                <td th:text="${contact.firstName}" />
-                <td th:text="${contact.lastName}" />
-                <td th:text="${contact.email}" />
-                <td th:text="${contact.phone}" />
-                <td th:text="${contact.position}" />
-                <td th:text="${contact.department}" />
-                <td th:text="${contact.customerCompany}" />
+                <td th:text="${contact.firstName}">John</td>
+                <td th:text="${contact.lastName}">Doe</td>
+                <td th:text="${contact.email}">john@example.com</td>
+                <td th:text="${contact.phone.getNumber()}">123-456-7890</td>
+                <td th:text="${contact.position}">Manager</td>
+                <td th:text="${contact.companyName}">Acme Corp</td>
                 <td>
-                    <a th:href="@{/contacts/edit/{id}(id=${contact.id})}" class="btn btn-sm btn-outline-primary">
-                        <i class="fas fa-edit"></i>
-                    </a>
+                    <span th:if="${contact.customer}" class="badge bg-success">Yes</span>
+                    <span th:unless="${contact.customer}" class="badge bg-secondary">No</span>
+                </td>
+                <td>
                     <a th:href="@{/contacts/{id}(id=${contact.id})}" class="btn btn-sm btn-outline-info">
                         <i class="fas fa-eye"></i>
                     </a>
-                    <button
-                            class="btn btn-sm btn-outline-danger"
+                    <a th:href="@{/contacts/edit/{id}(id=${contact.id})}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button class="btn btn-sm btn-outline-danger"
                             onclick="deleteContact(this)"
                             th:data-contact-id="${contact.id}">
                         <i class="fas fa-trash"></i>

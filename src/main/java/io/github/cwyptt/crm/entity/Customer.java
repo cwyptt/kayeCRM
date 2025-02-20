@@ -1,17 +1,11 @@
 package io.github.cwyptt.crm.entity;
 
-import io.github.cwyptt.crm.utility.NameUtils;
-import io.github.cwyptt.crm.utility.PhoneNumberFormatter;
-import io.github.cwyptt.crm.utility.validation.PhoneNumber.ValidPhoneNumber;
+import io.github.cwyptt.crm.enums.CustomerStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
-import static io.github.cwyptt.crm.utility.constant.ValidationConstants.*;
 
 @Data
 @NoArgsConstructor
@@ -21,24 +15,34 @@ public class Customer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = FIRST_NAME_REQUIRED)
-    @Column(name = "first_name")
-    private String firstName;
+    // Core relationships
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contact_id", nullable = false)
+    private Contact contact;  // The person who is the customer
 
-    @NotBlank(message = LAST_NAME_REQUIRED)
-    @Column(name = "last_name")
-    private String lastName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;  // Optional - if this customer represents a company relationship
 
-    @Email(message = EMAIL_VALID)
-    @NotBlank(message = EMAIL_REQUIRED)
-    @Column(unique = true)
-    private String email;
+    // These 2 for convenience in UI
+    private String contactFullName;
+    private String companyName;
 
-    @ValidPhoneNumber
-    private String phone;
+    // Customer-specific fields
+    @Column(nullable = false)
+    private CustomerStatus status;
 
-    private String company;
+    @Column(name = "customer_since", nullable = false)
+    private LocalDateTime customerSince;
 
+    private String notes;
+
+    // Billing/Account fields
+    private String accountNumber;
+    private String paymentTerms;
+    private String billingPreferences;
+
+    // Audit fields
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -54,9 +58,5 @@ public class Customer {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    public void setPhone(String phone) {
-        this.phone = PhoneNumberFormatter.formatPhoneNumber(phone);
     }
 }

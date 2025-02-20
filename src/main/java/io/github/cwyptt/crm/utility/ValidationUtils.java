@@ -2,10 +2,10 @@ package io.github.cwyptt.crm.utility;
 
 import io.github.cwyptt.crm.repository.ContactRepository;
 import io.github.cwyptt.crm.repository.CustomerRepository;
-import io.github.cwyptt.crm.utility.exception.CustomerHasAssociatedContactsException;
 import io.github.cwyptt.crm.utility.exception.CustomerNotFoundException;
 import io.github.cwyptt.crm.utility.exception.EmailAlreadyExistsException;
 import io.github.cwyptt.crm.utility.exception.FieldNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Provides centralized validation logic that can be reused across services.
  */
 @Component
+@RequiredArgsConstructor
 public class ValidationUtils {
     private static final Logger logger = LoggerFactory.getLogger(ValidationUtils.class);
 
@@ -30,14 +31,6 @@ public class ValidationUtils {
 
     private final CustomerRepository customerRepository;
     private final ContactRepository contactRepository;
-
-    public ValidationUtils(
-            CustomerRepository customerRepository,
-            ContactRepository contactRepository
-            ) {
-        this.customerRepository = customerRepository;
-        this.contactRepository = contactRepository;
-    }
 
     /**
      * Verifies that a customer exists with the given ID.
@@ -64,11 +57,11 @@ public class ValidationUtils {
         verifyCustomerExists(customerId, callingClass);
     }
 
-    public void verifyCustomerHasContact(Long customerId) {
-        if (!contactRepository.findByCustomerId(customerId).isEmpty()) {
-            throw new CustomerHasAssociatedContactsException(customerId);
-        }
-    }
+//    public void verifyCustomerHasContact(Long customerId) {
+//        if (!contactRepository.findByCustomerId(customerId).isEmpty()) {
+//            throw new CompanyHasAssociatedContactsException(customerId);
+//        }
+//    }
 
     /**
      * Verifies that an email is unique across all entities of a given type.

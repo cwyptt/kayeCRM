@@ -1,0 +1,20 @@
+<!-- fragments/sidebar/sidebar-section.html -->
+<div th:fragment="sidebar-section(title, icon, items)" class="nav-item">
+    <a class="nav-link d-flex justify-content-between align-items-center"
+       data-bs-toggle="collapse"
+       th:href="${'#' + title.toLowerCase() + 'Collapse'}"
+       role="button"
+       th:data-section="${title.toLowerCase()}"
+       aria-expanded="false">
+        <span>
+            <i th:class="${'fas ' + icon + ' me-2'}"></i>
+            <span th:text="${title}">Section Title</span>
+        </span>
+        <i class="fas fa-chevron-down"></i>
+    </a>
+    <div class="collapse" th:id="${title.toLowerCase() + 'Collapse'}">
+        <div class="nav flex-column ms-3" th:insert="${items}">
+            <!-- Items will be inserted here -->
+        </div>
+    </div>
+</div>

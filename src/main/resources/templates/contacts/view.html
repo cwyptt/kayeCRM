@@ -1,4 +1,4 @@
-<!-- resources/static/templates/contacts/view.html -->
+<!-- contacts/view.html -->
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
@@ -10,19 +10,25 @@
         <div class="card-body">
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <h5 class="card-title" th:text="${contact.getFullName()}">Contact Name</h5>
-                    <span class="text-muted">
-                        <em th:text="${contact.position}">Position</em> at
-                        <span th:text="${contact.customerCompany}">Company Name</span>
-                    </span>
-<!--                    <p class="text-muted" th:text="${positionAndCompany}"></p>-->
-<!--                        <span th:text="${contact.position}">Position</span> at-->
-<!--                        <a th:href="@{/customers/{id}(id=${contact.customerId})}"-->
-<!--                           th:text="${customerName}">Company Name</a>-->
+                    <h5 class="card-title" th:text="${contact.fullName}">Contact Name</h5>
+                    <p class="text-muted" th:if="${contact.companyName}">
+                        <span th:text="${contact.position}">Position</span> at
+                        <a th:href="@{/companies/{id}(id=${contact.companyId})}"
+                           th:text="${contact.companyName}">Company Name</a>
+                    </p>
+                    <div class="mt-2">
+                        <span th:if="${contact.customer}" class="badge bg-success">Customer</span>
+                        <span th:if="${contact.primaryContact}" class="badge bg-info">Primary Contact</span>
+                    </div>
                 </div>
                 <div class="col-md-6 text-end">
                     <a th:href="@{/contacts/edit/{id}(id=${contact.id})}" class="btn btn-primary">
                         <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a th:unless="${contact.customer}"
+                       th:href="@{/customers/add(contactId=${contact.id})}"
+                       class="btn btn-success">
+                        <i class="fas fa-user-plus"></i> Convert to Customer
                     </a>
                     <a th:href="@{/contacts}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Back
@@ -40,7 +46,7 @@
 
                         <dt class="col-sm-4">Phone</dt>
                         <dd class="col-sm-8">
-                            <a th:href="'tel:' + ${contact.phone}" th:text="${contact.phone}">123-456-7890</a>
+                            <a th:href="'tel:' + ${contact.phone.number}" th:text="${contact.phone.getNumber()}">123-456-7890</a>
                         </dd>
 
                         <dt class="col-sm-4">Position</dt>
@@ -48,23 +54,6 @@
 
                         <dt class="col-sm-4">Department</dt>
                         <dd class="col-sm-8" th:text="${contact.department}">Department</dd>
-
-                        <dt class="col-sm-4">Company</dt>
-                        <dd class="col-sm-8" th:text="${contact.customerCompany}">Company</dd>
-
-                        <dt class="col-sm-4">Contact</dt>
-                        <dd class="col-sm-8">
-                            <span class="badge" th:classappend="${contact.primary} ? 'bg-success' : 'bg-secondary'"
-                                  th:text="${contact.primary} ? 'Primary' : 'Secondary'">
-                            </span>
-                            <span class="small ms-1 me-1">
-                                contact of
-                            </span>
-                            <a
-                                    th:href="@{/customers/{id}(id=${contact.customerId})}"
-                                    th:text="${customerName}">Customer Name
-                            </a>
-                        </dd>
                     </dl>
                 </div>
             </div>

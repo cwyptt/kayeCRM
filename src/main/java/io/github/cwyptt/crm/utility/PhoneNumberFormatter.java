@@ -2,13 +2,13 @@ package io.github.cwyptt.crm.utility;
 
 public class PhoneNumberFormatter {
 
-    public static String formatPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null) {
+    public static String formatPhoneNumber(String phone) {
+        if (phone == null) {
             return null;
         }
 
         // Remove all non-digit characters
-        String digitsOnly = phoneNumber.replaceAll("[^0-9]", "");
+        String digitsOnly = phone.replaceAll("[^0-9]", "");
 
         if (digitsOnly.length() == 10) {
             return String.format("(%s) %s-%s",
@@ -17,13 +17,13 @@ public class PhoneNumberFormatter {
                     digitsOnly.substring(6));
         }
 
-        return phoneNumber;
+        return phone;
     }
 
-    public static String normalizePhoneNumber(String phoneNumber) {
-        if (phoneNumber == null) {
+    public static String normalizePhoneNumber(String phone) {
+        if (phone == null) {
             return null;
         }
-        return phoneNumber.replaceAll("[^0-9]", "");
+        return phone.replaceAll("[^0-9]", "");
     }
 }

@@ -1,0 +1,31 @@
+<!-- fragments/sidebar/sidebar-items.html -->
+<div th:fragment="main-nav">
+    <!-- Home Link -->
+    <a th:href="@{/}"
+       class="nav-link"
+       th:classappend="${activeTab == 'home'} ? 'active'">
+        <i class="fas fa-home me-2"></i>Home
+    </a>
+
+    <!-- Separator -->
+    <hr class="sidebar-divider">
+</div>
+
+<!-- Dashboard Items -->
+<div th:fragment="dashboard-items">
+    <a th:href="@{/customers}"
+       class="nav-link"
+       th:classappend="${activeTab == 'customers'} ? 'active'">
+        <i class="fas fa-users me-2"></i>Customers
+    </a>
+    <a th:href="@{/contacts}"
+       class="nav-link"
+       th:classappend="${activeTab == 'contacts'} ? 'active'">
+        <i class="fas fa-address-book me-2"></i>Contacts
+    </a>
+    <a th:href="@{/companies}"
+       class="nav-link"
+       th:classappend="${activeTab == 'companies'} ? 'active'">
+        <i class="fas fa-building me-2"></i>Companies
+    </a>
+</div>

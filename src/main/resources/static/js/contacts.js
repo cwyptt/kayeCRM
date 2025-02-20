@@ -1,4 +1,3 @@
-// resources/static/js/utils/contact.js
 function deleteContact(button) {
     if (confirm('Are you sure you want to delete this contact?')) {
         const contactId = button.getAttribute('data-contact-id');
@@ -9,17 +8,21 @@ function deleteContact(button) {
                 'Content-Type': 'application/json'
             }
         })
-            .then(response => {
+            .then(async response => {
+                const data = await response.json().catch(() => null);
+
                 if (response.ok) {
                     button.closest('tr').remove();
                     showSuccessToast('Contact deleted successfully');
+                } else if (response.status === 409) {
+                    showErrorToast('This contact cannot be deleted because they are a customer. Please deactivate their customer relationship first.');
                 } else {
-                    alert('Error deleting contact');
+                    showErrorToast(data?.message || 'Error deleting contact');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error deleting contact');
+                showErrorToast('An unexpected error occurred');
             });
     }
 }

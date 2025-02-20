@@ -1,28 +1,24 @@
 package io.github.cwyptt.crm.repository;
 
 import io.github.cwyptt.crm.entity.Contact;
+import io.github.cwyptt.crm.utility.constant.QueryConstants;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static io.github.cwyptt.crm.utility.constant.QueryConstants.PRIMARY_CONTACT_QUERY;
-import static io.github.cwyptt.crm.utility.constant.QueryConstants.SEARCH_CONTACTS_QUERY;
-
+@Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {
-    List<Contact> findByCustomerId(Long customerId);
-    Optional<Contact> findByEmailAndCustomerId(String email, Long customerId);
+    boolean existsByEmail(String email);
+    Optional<Contact> findByEmail(String email);
 
-    @Query(PRIMARY_CONTACT_QUERY)
-    Optional<Contact> findPrimaryContactByCustomerId(@Param("customerId") Long customerId);
+    // Company-related queries
+    List<Contact> findByCompanyId(Long companyId);
 
-    boolean existsByCustomerId(Long customerId);
-    boolean existsByEmailAndCustomerId(String email, Long customerId);
-
-    @Query(SEARCH_CONTACTS_QUERY)
+    @Query(QueryConstants.SEARCH_CONTACTS_QUERY)
     List<Contact> searchContacts(
             @Param("firstName") String firstName,
             @Param("lastName") String lastName,
@@ -30,6 +26,8 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
             @Param("phone") String phone,
             @Param("position") String position,
             @Param("department") String department,
-            @Param("customerId") Long customerId
+            @Param("companyId") Long companyId,
+            @Param("isCustomer") Boolean isCustomer
     );
+
 }

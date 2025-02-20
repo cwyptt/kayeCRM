@@ -21,21 +21,38 @@ public class NameUtils {
         String firstName = "";
         String lastName = "";
 
-        // Safely get firstName using reflection
-        java.lang.reflect.Field firstNameField = ReflectionUtils.findField(obj.getClass(), "firstName");
-        if (firstNameField != null) {
-            ReflectionUtils.makeAccessible(firstNameField);
-            Object firstNameValue = ReflectionUtils.getField(firstNameField, obj);
+//        // Safely get firstName using reflection
+//        java.lang.reflect.Field firstNameField = ReflectionUtils.findField(obj.getClass(), "firstName");
+//        if (firstNameField != null) {
+//            ReflectionUtils.makeAccessible(firstNameField);
+//            Object firstNameValue = ReflectionUtils.getField(firstNameField, obj);
+//            if (firstNameValue != null) {
+//                firstName = firstNameValue.toString().trim();
+//            }
+//        }
+//
+//        // Safely get lastName using reflection
+//        java.lang.reflect.Field lastNameField = ReflectionUtils.findField(obj.getClass(), "lastName");
+//        if (lastNameField != null) {
+//            ReflectionUtils.makeAccessible(lastNameField);
+//            Object lastNameValue = ReflectionUtils.getField(lastNameField, obj);
+//            if (lastNameValue != null) {
+//                lastName = lastNameValue.toString().trim();
+//            }
+//        }
+
+        // Use method reflection instead of field reflection
+        java.lang.reflect.Method getFirstName = ReflectionUtils.findMethod(obj.getClass(), "getFirstName");
+        if (getFirstName != null) {
+            Object firstNameValue = ReflectionUtils.invokeMethod(getFirstName, obj);
             if (firstNameValue != null) {
                 firstName = firstNameValue.toString().trim();
             }
         }
 
-        // Safely get lastName using reflection
-        java.lang.reflect.Field lastNameField = ReflectionUtils.findField(obj.getClass(), "lastName");
-        if (lastNameField != null) {
-            ReflectionUtils.makeAccessible(lastNameField);
-            Object lastNameValue = ReflectionUtils.getField(lastNameField, obj);
+        java.lang.reflect.Method getLastName = ReflectionUtils.findMethod(obj.getClass(), "getLastName");
+        if (getLastName != null) {
+            Object lastNameValue = ReflectionUtils.invokeMethod(getLastName, obj);
             if (lastNameValue != null) {
                 lastName = lastNameValue.toString().trim();
             }

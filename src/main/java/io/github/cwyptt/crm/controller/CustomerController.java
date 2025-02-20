@@ -1,18 +1,22 @@
 package io.github.cwyptt.crm.controller;
 
 import io.github.cwyptt.crm.dto.CustomerDto;
+import io.github.cwyptt.crm.enums.CustomerStatus;
 import io.github.cwyptt.crm.service.CustomerService;
-import io.github.cwyptt.crm.utility.exception.CustomerHasAssociatedContactsException;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.github.cwyptt.crm.utility.ErrorResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("${api.base.url}/customers")
+@Slf4j
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -47,26 +51,26 @@ public class CustomerController {
         try {
             customerService.deleteCustomer(id);
             return ResponseEntity.ok().build();
-        } catch (CustomerHasAssociatedContactsException e) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(new ErrorResponse("CUSTOMER_HAS_CONTACTS", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("INTERNAL_ERROR", "An unexpected error occurred while trying to delete this customer"));
+                    .body(new ErrorResponse("INTERNAL_ERROR", e.getMessage()));
         }
     }
 
-    // Additional mappings
     @GetMapping("/search")
     public ResponseEntity<List<CustomerDto>> searchCustomers(
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String phone,
-            @RequestParam(required = false) String company) {
+            @RequestParam(required = false) CustomerStatus status,
+            @RequestParam(required = false) Long companyId,
+            @RequestParam(required = false) Long contactId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime since) {
         return ResponseEntity.ok(
-                customerService.searchCustomers(firstName, lastName, email, phone, company));
+                customerService.searchCustomers(status, companyId, contactId, since));
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateCustomer(@PathVariable Long id) {
+        customerService.deactivateCustomer(id);
+        return ResponseEntity.ok().build();
     }
 }

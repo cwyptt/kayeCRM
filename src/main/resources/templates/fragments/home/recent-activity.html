@@ -1,0 +1,35 @@
+<!--&lt;!&ndash; fragments/home/recent-activity.html &ndash;&gt;-->
+<!--<div th:fragment="recent-activity" class="col-md-8 mb-4">-->
+<!--    <div class="card">-->
+<!--        <div class="card-header">-->
+<!--            <h5 class="card-title mb-0">Recent Activity</h5>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--            <div class="activity-feed">-->
+<!--                <div th:each="activity : ${activities}" class="activity-item">-->
+<!--                    <div class="d-flex">-->
+<!--                        <div class="activity-icon me-3">-->
+<!--                            <i th:class="${'fas ' + (activity.action == 'created' ? 'fa-plus-circle text-success' :-->
+<!--                                                   activity.action == 'updated' ? 'fa-edit text-primary' :-->
+<!--                                                   activity.action == 'deleted' ? 'fa-trash text-danger' :-->
+<!--                                                   'fa-info-circle text-info')}"></i>-->
+<!--                        </div>-->
+<!--                        <div class="activity-content">-->
+<!--                            <div class="activity-description" th:text="${activity.description}">-->
+<!--                                Activity description-->
+<!--                            </div>-->
+<!--                            <small class="text-muted">-->
+<!--                                <span th:text="${#temporals.format(activity.timestamp, 'MMM dd, yyyy HH:mm')}">-->
+<!--                                    Jan 1, 2024 12:00-->
+<!--                                </span>-->
+<!--                            </small>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div th:if="${#lists.isEmpty(activities)}" class="text-muted text-center py-3">-->
+<!--                    No recent activity-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

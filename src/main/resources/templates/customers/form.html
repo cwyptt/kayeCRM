@@ -1,13 +1,9 @@
-<!-- resources/static/templates/customers/form.html -->
+<!-- customers/form.html -->
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/main}">
-<!--<head>-->
-<!--    <title th:text="${customer.id == null ? 'Adssd Customer' : 'Edisst Customer'}">Add/Edit Customer</title>-->
-<!--</head>-->
-<!--<head th:replace="~{fragments/head :: head-fragment}"></head>-->
 <body>
 <div layout:fragment="content">
     <div class="card">
@@ -18,33 +14,56 @@
                 <input type="hidden" th:field="*{id}" />
 
                 <div class="mb-3">
-                    <label for="firstName" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
-                    <div class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                    <label for="contact" class="form-label">Contact</label>
+                    <select class="form-select" id="contact" th:field="*{contactId}" required>
+                        <option value="">Select Contact</option>
+                        <option th:each="contact : ${contacts}"
+                                th:value="${contact.id}"
+                                th:text="${contact.fullName + (!#strings.isEmpty(contact.companyName) ? ' (' + contact.companyName + ')' : '')}">
+                        </option>
+                    </select>
+                    <div class="text-danger" th:if="${#fields.hasErrors('contactId')}" th:errors="*{contactId}"></div>
+                </div>
+
+<!--                <div class="mb-3">-->
+<!--                    <label for="company" class="form-label">Company</label>-->
+<!--                    <select class="form-select" id="company" th:field="*{companyId}">-->
+<!--                        <option value="">Select Company</option>-->
+<!--                        <option th:each="company : ${companies}"-->
+<!--                                th:value="${company.id}"-->
+<!--                                th:text="${company.name}">-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </div>-->
+
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" th:field="*{status}" required>
+                        <option th:each="status : ${T(io.github.cwyptt.crm.enums.CustomerStatus).values()}"
+                                th:value="${status}"
+                                th:text="${status}">
+                        </option>
+                    </select>
                 </div>
 
                 <div class="mb-3">
-                    <label for="lastName" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required>
-                    <div class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                    <label for="accountNumber" class="form-label">Account Number</label>
+                    <input type="text" class="form-control" id="accountNumber" th:field="*{accountNumber}">
                 </div>
 
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" th:field="*{email}" required>
-                    <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    <label for="paymentTerms" class="form-label">Payment Terms</label>
+                    <input type="text" class="form-control" id="paymentTerms" th:field="*{paymentTerms}">
                 </div>
 
                 <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="text" class="form-control" id="phone" th:field="*{phone}">
-                    <div class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                    <label for="billingPreferences" class="form-label">Billing Preferences</label>
+                    <input type="text" class="form-control" id="billingPreferences" th:field="*{billingPreferences}">
                 </div>
 
                 <div class="mb-3">
-                    <label for="company" class="form-label">Company</label>
-                    <input type="text" class="form-control" id="company" th:field="*{company}">
-                    <div class="text-danger" th:if="${#fields.hasErrors('company')}" th:errors="*{company}"></div>
+                    <label for="notes" class="form-label">Notes</label>
+                    <textarea class="form-control" id="notes" th:field="*{notes}" rows="3"></textarea>
                 </div>
 
                 <div class="d-flex justify-content-between">
